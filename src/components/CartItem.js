@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { removeItem } from '../features/cartSlice'
 import { useDispatch } from 'react-redux'
+
+//resim
 import Destination1 from "../assets/Destination1.png"
+
 import styled from 'styled-components'
+
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+
 import LikeBtn from './LikeBtn'
+import EditModal from './EditModal'
 
 const CartItem = ({ id, name,
     email, phone, website }) => {
@@ -20,6 +25,7 @@ const CartItem = ({ id, name,
 
     //console.log("data", data)
 
+   
     const dispatch = useDispatch()
     return (
         <Container>
@@ -32,8 +38,9 @@ const CartItem = ({ id, name,
                 </div>
                 <div className='buttonArea'>
                     <LikeBtn />
-                    <BorderColorOutlinedIcon className='editButton'/>
+                  <EditModal/>
                     <DeleteIcon className='deleteButton' onClick={() => dispatch(removeItem(id))} />
+
                 </div>
 
             </div>
