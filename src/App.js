@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import CartContainer from './components/CartContainer';
 
 function App() {
