@@ -6,14 +6,15 @@ import { useDispatch } from 'react-redux'
 import Destination1 from "../assets/Destination1.png"
 
 import styled from 'styled-components'
-
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import Modal from "react-modal"
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import LikeBtn from './LikeBtn'
-import EditModal from './EditModal'
+import ModalForm from './ModalForm'
 
 const CartItem = ({ id, name,
     email, phone, website }) => {
@@ -24,8 +25,12 @@ const CartItem = ({ id, name,
     }
 
     //console.log("data", data)
+    const [isOpen, setIsOpen] = useState(false);
 
-   
+    function toggleModal() {
+        setIsOpen(!isOpen)
+    }
+
     const dispatch = useDispatch()
     return (
         <Container>
@@ -38,7 +43,18 @@ const CartItem = ({ id, name,
                 </div>
                 <div className='buttonArea'>
                     <LikeBtn />
-                  <EditModal/>
+                    <div> <BorderColorOutlinedIcon className='editButton' onClick={toggleModal} />
+
+                        <Modal
+                            isOpen={isOpen}
+                            onRequestClose={toggleModal}
+                            style={customStyles}
+                        >
+                            <ModalForm />
+
+                            <button onClick={toggleModal}>Close modal</button>
+                        </Modal></div>
+
                     <DeleteIcon className='deleteButton' onClick={() => dispatch(removeItem(id))} />
 
                 </div>
@@ -97,3 +113,19 @@ img{
         }
  }
 `
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        header: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+        }
+    },
+
+};
