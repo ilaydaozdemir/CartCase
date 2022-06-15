@@ -6,8 +6,9 @@ import styled from 'styled-components'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import LikeBtn from './LikeBtn'
 
 const CartItem = ({ id, name,
     email, phone, website }) => {
@@ -30,10 +31,9 @@ const CartItem = ({ id, name,
                     <div><LanguageOutlinedIcon className='icon' />{website}</div>
                 </div>
                 <div className='buttonArea'>
-
-                    {/*liked button */}
-                    <BorderColorOutlinedIcon />
-                    <DeleteOutlineOutlinedIcon onClick={() => dispatch(removeItem(id))} />
+                    <LikeBtn />
+                    <BorderColorOutlinedIcon className='editButton'/>
+                    <DeleteIcon className='deleteButton' onClick={() => dispatch(removeItem(id))} />
                 </div>
 
             </div>
@@ -82,6 +82,11 @@ img{
      justify-content: space-between;
      &:hover {
           cursor: pointer;
+        }
+        .deleteButton,.editButton{
+            &:hover{
+                color:#189ad4;
+            }
         }
  }
 `
