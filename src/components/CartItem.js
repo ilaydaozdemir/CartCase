@@ -1,27 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { removeItem } from '../features/cartSlice'
 import { useDispatch } from 'react-redux'
-
-//resim
-import Destination1 from "../assets/Destination1.png"
-
+import axios from "axios"
 import styled from 'styled-components'
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import Modal from "react-modal"
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
-import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined'
+import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 import LikeBtn from './LikeBtn'
 import ModalForm from './ModalForm'
 
-const CartItem = ({ id, name,
+const CartItem = ({ id, username, name,
     email, phone, website }) => {
 
-    const data =
-    {
-        image: Destination1
+    const [svg, setSvg] = useState(null)
+    const userData = {
+        id, username, name, email, phone, website
+    }
+
+    useEffect(() => {
+        createAvatar(username)
+    }, [])
+
+    const createAvatar = (username) => {
+        const url = `https://avatars.dicebear.com/v2/avataaars/${username}.svg?options[mood][]=happy`
+        axios.get(url).then(response => {
+            setSvg(response.data)
+        })
     }
 
     //console.log("data", data)
@@ -31,10 +39,15 @@ const CartItem = ({ id, name,
         setIsOpen(!isOpen)
     }
 
+    function closeModal() {
+        setIsOpen(false)
+    }
+
     const dispatch = useDispatch()
     return (
         <Container>
-            <div className='containerIn'><img src={data.image} alt="" />
+            <div className='containerIn'>
+                <div dangerouslySetInnerHTML={{ __html: svg }} style={{ width: 200, height: 200 }} />
                 <div className='text'>
                     <div className='name'>{name}</div>
                     <div><EmailOutlinedIcon className='icon' />{email}</div>
@@ -50,10 +63,9 @@ const CartItem = ({ id, name,
                             onRequestClose={toggleModal}
                             style={customStyles}
                         >
-                            <ModalForm />
-
-                            <button onClick={toggleModal}>Close modal</button>
-                        </Modal></div>
+                            <ModalForm user={userData} closeModal={closeModal} />
+                        </Modal>
+                    </div>
 
                     <DeleteIcon className='deleteButton' onClick={() => dispatch(removeItem(id))} />
 
@@ -65,14 +77,16 @@ const CartItem = ({ id, name,
         </Container>
     )
 }
-export default CartItem;
+export default CartItem
 
 const Container = styled.div`
-margin:1rem;
 display: flex;
 flex-direction: row;
-flex-wrap: wrap;
-.containerIn{
+min-width: 240px;
+flex-grow: 1;
+margin-bottom: 20px;
+
+.containerIn {
  border: 0.4px ridge #0002;
 img{
   
@@ -85,6 +99,9 @@ img{
      .name{
          font-size: medium;
          font-weight: 600;
+     }
+     .email {
+         font-size: 8px;
      }
   div{
      display: flex;
