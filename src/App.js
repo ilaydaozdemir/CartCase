@@ -1,5 +1,8 @@
-import React from 'react';
-import CartContainer from './components/CartContainer';
+import React from 'react'
+import CartContainer from './components/CartContainer'
+import Modal from 'react-modal'
+
+Modal.setAppElement('#root');
 
 function App() {
   return (
@@ -9,4 +12,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
