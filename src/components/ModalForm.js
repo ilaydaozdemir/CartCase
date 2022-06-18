@@ -3,13 +3,18 @@ import styled from 'styled-components'
 import CloseIcon from '@mui/icons-material/Close'
 import { useDispatch, useSelector } from 'react-redux'
 import { store } from '../app/store'
+import { updateItem } from '../features/cartSlice'
 
 
 const ModalForm = ({ user, closeModal }) => {
+    const dispatch = useDispatch()
+
     const [name, setName] = useState(user.name)
     const [email, setEmail] = useState(user.email)
     const [phone, setPhone] = useState(user.phone)
     const [website, setWebsite] = useState(user.website)
+
+    const [formErrors, setFormErrors] = useState([])
 
     const nameChanged = (e) => {
         setName(e.target.value)
@@ -27,6 +32,35 @@ const ModalForm = ({ user, closeModal }) => {
         setWebsite(e.target.value)
     }
 
+    const submit = () => {
+        let errors = []
+
+        if (name.trim().length === 0) {
+            errors.push('name_required')
+        }
+
+        if (email.trim().length === 0) {
+            errors.push('email_required')
+        }
+
+        if (phone.trim().length === 0) {
+            errors.push('phone_required')
+        }
+
+        if (website.trim().length === 0) {
+            errors.push('website_required')
+        }
+
+        console.log(errors)
+
+        if (errors.length === 0) {
+            dispatch(updateItem({ id: user.id, name, email, phone, website }))
+            closeModal()
+        } else {
+            setFormErrors(errors)
+        }
+    }
+
     return (
         <div>
             <Header >
@@ -38,27 +72,39 @@ const ModalForm = ({ user, closeModal }) => {
             <Form>
                 <div>
                     <label htmlFor="name">Name</label>
-                    <input type="text" id="name" className="name" value={name} onChange={nameChanged} required />
+                    <input type="text" id="name" className="name" value={name} onChange={nameChanged} />
+                    {formErrors.includes('name_required') &&
+                        <FormError>Name required</FormError>
+                    }
                 </div>
 
                 <div>
                     <label htmlFor="email">Email</label>
-                    <input type="email" id="email" className="email" value={email} onChange={emailChanged} required />
+                    <input type="email" id="email" className="email" value={email} onChange={emailChanged} />
+                    {formErrors.includes('email_required') &&
+                        <FormError>Email required</FormError>
+                    }
                 </div>
 
                 <div>
                     <label htmlFor="phone">Phone</label>
-                    <input type="tel" id="phone" className="phone" value={phone} onChange={phoneChanged} required />
+                    <input type="tel" id="phone" className="phone" value={phone} onChange={phoneChanged} />
+                    {formErrors.includes('phone_required') &&
+                        <FormError>Phone required</FormError>
+                    }
                 </div>
 
                 <div>
                     <label htmlFor="website">Website</label>
-                    <input type="text" id="website" className="website" value={website} onChange={websiteChanged} required />
+                    <input type="text" id="website" className="website" value={website} onChange={websiteChanged} />
+                    {formErrors.includes('website_required') &&
+                        <FormError>Website required</FormError>
+                    }
                 </div>
 
                 <ButtonArea>
                     <div><input type="button" className='cancel' value="Cancel" onClick={closeModal} /></div>
-                    <div><input type="button" className='submit' value="Ok" /></div>
+                    <div><input type="button" className='submit' value="Ok" onClick={submit} /></div>
                 </ButtonArea>
             </Form>
         </div>
@@ -80,9 +126,6 @@ input{
     &:focus{
       background-color: #e6f0f4;
     }
-}
-.website{
-    margin-bottom: 64px;
 }
 `
 const Header = styled.div`
@@ -126,5 +169,8 @@ border-top: 1px solid gray ;
       transition: 0.6s ease-in-out;
   }
 }
+`
 
+const FormError = styled.div`
+color: red;
 `

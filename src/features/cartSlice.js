@@ -14,10 +14,17 @@ const cartSlice = createSlice({
         removeItem: (state, action) => {
             const itemId = action.payload
             state.cartItems = state.cartItems.filter((item) => item.id !== itemId)
+        },
+        updateItem: (state, action) => {
+            state.cartItems.map((item, index) => {
+                if (item.id === action.payload.id) {
+                    state.cartItems[index] = action.payload
+                }
+            })
         }
     }
 })
 
-export const { initializeItems, removeItem } = cartSlice.actions
+export const { initializeItems, removeItem, updateItem } = cartSlice.actions
 
 export default cartSlice.reducer

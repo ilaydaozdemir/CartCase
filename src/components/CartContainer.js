@@ -38,4 +38,5 @@ export default CartContainer
 const Container = styled.div`
 display: flex;
 flex-wrap: wrap;
+gap: 16px;
 `

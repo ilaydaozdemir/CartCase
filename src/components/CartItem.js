@@ -80,11 +80,7 @@ const CartItem = ({ id, username, name,
 export default CartItem
 
 const Container = styled.div`
-display: flex;
-flex-direction: row;
-min-width: 240px;
-flex-grow: 1;
-margin-bottom: 20px;
+flex-grow: 2;
 
 .containerIn {
  border: 0.4px ridge #0002;
